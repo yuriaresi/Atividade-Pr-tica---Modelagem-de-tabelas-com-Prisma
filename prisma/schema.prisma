@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model Usuario {
+  id     String  @id @unique @default(uuid())
+  nome   String
+  idade  Int
+  email  String  @unique
+  senha  String
+  gitHub String?
+
+  createAt  DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+model Produto {
+  id                 String   @id @unique @default(uuid())
+  descricao          String
+  valor              Int
+  quantidade_estoque Int
+  data               DateTime @default(now())
+  disponivel         Boolean
+}
+
+model Loja {
+  id                    String   @id @unique @default(uuid())
+  cnpj                  String   @unique
+  nome                  String
+  segmento              String?  @default("Alimentação")
+  telefone              Int?
+  quantidade_de_filiais Int
+  data_criacao          DateTime @default(now())
+}
+
+model Fornecedor {
+  id           String   @id @unique @default(uuid())
+  nome         String
+  email        String   @unique
+  avaliacao    Int
+  data_criacao DateTime @default(now())
+  data_atualizacao DateTime @updatedAt
+}
